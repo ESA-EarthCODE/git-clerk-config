@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Preview</title>
+    <style>
+      html,
+      body,
+      iframe {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+      }
+    </style>
+  </head>
+  <body>
+    <iframe
+      src="https://opensciencedata.esa.int/stac-browser/#/"
+      frameborder="0"
+    ></iframe>
+    <script>
+      let previousMarkdown;
+      // Listen for messages from parent
+      window.onload = () => {
+        const iframeWindow = document.querySelector("iframe").contentWindow;
+        iframeWindow.postMessage(
+          {
+            data: {
+              id: "",
+              description: "Update the form to view the live preview",
+            },
+          },
+          "*",
+        );
+        window.addEventListener("message", (event) => {
+          iframeWindow.postMessage({ data: event.data.detail }, "*");
+        });
+      };
+    </script>
+  </body>
+</html>
