@@ -702,8 +702,18 @@ globalThis.generateEnums = async (
 ) => {
   if (schemaMetaDetails.schema.allOf) {
     for (const property of Object.keys(globalThis.customEditorInterfaces)) {
+      const hidden = document.createElement("div");
+      const jsoneditor = new JSONEditor(hidden, {
+        schema: schemaMetaDetails.schema,
+      });
+      schemaMetaDetails.schema = {
+        ...schemaMetaDetails.schema,
+        ...jsoneditor.expandSchema(jsoneditor.schema),
+      };
+      hidden.remove();
       const propertyAvailable =
-        schemaMetaDetails.schema.allOf[1].properties[property];
+        globalThis.customEditorInterfaces[property].func?.name ===
+          "OSCEditor" && schemaMetaDetails.schema.properties[property];
       if (propertyAvailable) {
         let path = globalThis.customEditorInterfaces[property].path;
         const catalog = await getFileDetails(
