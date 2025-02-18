@@ -20,22 +20,30 @@
       frameborder="0"
     ></iframe>
     <script>
-      let previousMarkdown;
+      let contentProvided;
       // Listen for messages from parent
       window.onload = () => {
         const iframeWindow = document.querySelector("iframe").contentWindow;
-        iframeWindow.postMessage(
-          {
-            data: {
-              id: "",
-              description: "Update the form to view the live preview",
-            },
-          },
-          "*",
-        );
         window.addEventListener("message", (event) => {
           iframeWindow.postMessage({ data: event.data.detail }, "*");
+          contentProvided = true;
         });
+        setTimeout(() => {
+          if (contentProvided) {
+            return;
+          }
+          // Init with dummy content
+          iframeWindow.postMessage(
+            {
+              data: {
+                id: "",
+                description: "Update the form to view the live preview",
+              },
+            },
+            "*",
+          );
+          contentProvided = true;
+        }, 1000);
       };
     </script>
   </body>
