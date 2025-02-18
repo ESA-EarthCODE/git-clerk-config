@@ -434,8 +434,17 @@ class TemporalIntervalEditor extends JSONEditor.AbstractEditor {
     const options = this.options;
     const description = this.schema.description;
     const theme = this.theme;
-    const startVals = this.defaults.startVals[this.key];
-    const editorInterface = globalThis.customEditorInterfaces[this.key];
+
+    const deepValue = function (obj, path) {
+      for (var i = 0, path = path.split("."), len = path.length; i < len; i++) {
+        obj = obj?.hasOwnProperty(path[i]) ? obj[path[i]] : undefined;
+      }
+      return obj;
+    };
+    const startVals = deepValue(
+      this.defaults.startVals,
+      this.path.replace("root.", ""),
+    );
 
     // Create label and description elements if not in compact mode
     if (!options.compact)
@@ -455,10 +464,16 @@ class TemporalIntervalEditor extends JSONEditor.AbstractEditor {
     // create
     const dateTimeStart = document.createElement("input");
     dateTimeStart.setAttribute("type", "date");
-    dateTimeStart.setAttribute("value", "2024-01-01T00:00");
+    dateTimeStart.setAttribute(
+      "value",
+      startVals ? startVals[0].split("T")[0] : "2024-01-01T00:00",
+    );
     const dateTimeEnd = document.createElement("input");
     dateTimeEnd.setAttribute("type", "date");
-    dateTimeEnd.setAttribute("value", "2024-01-01T00:00");
+    dateTimeEnd.setAttribute(
+      "value",
+      startVals ? startVals[1].split("T")[0] : "2024-01-01T00:00",
+    );
     const temporalInterval = document.createElement("div");
     temporalInterval.appendChild(dateTimeStart);
     temporalInterval.appendChild(dateTimeEnd);
@@ -479,7 +494,7 @@ class TemporalIntervalEditor extends JSONEditor.AbstractEditor {
       this.input.disabled = true;
     }
 
-    // Add event listener for change events on the range slider
+    // Add event listener for change events on the input
     const changeEventHandler = (element, type) => {
       element.addEventListener("change", (e) => {
         e.preventDefault();
@@ -488,7 +503,7 @@ class TemporalIntervalEditor extends JSONEditor.AbstractEditor {
           this.value = [null, null];
         }
         this.value[type === "start" ? 0 : 1] =
-          `${e.target.value}T${type === "start" ? "00:00:00" : "23:59:59"}Z`;
+          `${element.value}T${type === "start" ? "00:00:00" : "23:59:59"}Z`;
         this.onChange(true);
       });
     };
