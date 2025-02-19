@@ -592,11 +592,16 @@ const saveFunc = async (
           (link) => link.href !== `../../${childPath}`,
         );
 
+        const finalContent = {
+          data: stringifyIfNeeded(content, decoderBase64ToUtf8(fileDetails.content)),
+          type: "string"
+        }
+
         await createAndUpdateFile(
           session,
           path,
           path,
-          stringifyIfNeeded(content, decoderBase64ToUtf8(fileDetails.content)),
+          finalContent,
           fileDetails.sha,
         );
       }
@@ -621,11 +626,16 @@ const saveFunc = async (
           },
         ];
 
+        const finalContent = {
+          data: stringifyIfNeeded(content, decoderBase64ToUtf8(fileDetails.content)),
+          type: "string"
+        }
+
         await createAndUpdateFile(
           session,
           path,
           path,
-          stringifyIfNeeded(content, decoderBase64ToUtf8(fileDetails.content)),
+          finalContent,
           fileDetails.sha,
         );
       }
