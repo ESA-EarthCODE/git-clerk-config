@@ -210,10 +210,14 @@ class OSCEditor extends JSONEditor.AbstractEditor {
 
     // Add options to the select input
     const enumOptions = this.schema.enum || this.schema.items.enum || [];
-    enumOptions.forEach((option) => {
+    enumOptions.forEach((value) => {
+      const id =
+        editorInterface.customDataDecoder && value
+          ? editorInterface.customDataDecoder(value)
+          : value;
       const optionElement = document.createElement("option");
-      optionElement.text = option.text;
-      optionElement.value = option.value;
+      optionElement.text = id ? editorInterface.enumsMetaData[id].text : "";
+      optionElement.value = id;
       selector.appendChild(optionElement);
     });
 
@@ -264,14 +268,16 @@ class OSCEditor extends JSONEditor.AbstractEditor {
         // Handle changes for array type schema
         if (this.schema.type === "array") {
           // Unselect previous values
-          for (const val of previousVal) {
-            content = editorInterface.operation.unselect(content, {
-              file: editorInterface.file(
-                editorInterface.customDataDecoder
-                  ? editorInterface.customDataDecoder(val)
-                  : val,
-              ),
-            });
+          if (previousVal) {
+            for (const val of previousVal) {
+              content = editorInterface.operation.unselect(content, {
+                file: editorInterface.file(
+                  editorInterface.customDataDecoder
+                    ? editorInterface.customDataDecoder(val)
+                    : val,
+                ),
+              });
+            }
           }
           // Update previous values with the newly selected options
           previousVal = Array.from(e.target.selectedOptions).map((option) =>
@@ -593,9 +599,12 @@ const saveFunc = async (
         );
 
         const finalContent = {
-          data: stringifyIfNeeded(content, decoderBase64ToUtf8(fileDetails.content)),
-          type: "string"
-        }
+          data: stringifyIfNeeded(
+            content,
+            decoderBase64ToUtf8(fileDetails.content),
+          ),
+          type: "string",
+        };
 
         await createAndUpdateFile(
           session,
@@ -627,9 +636,12 @@ const saveFunc = async (
         ];
 
         const finalContent = {
-          data: stringifyIfNeeded(content, decoderBase64ToUtf8(fileDetails.content)),
-          type: "string"
-        }
+          data: stringifyIfNeeded(
+            content,
+            decoderBase64ToUtf8(fileDetails.content),
+          ),
+          type: "string",
+        };
 
         await createAndUpdateFile(
           session,
@@ -658,6 +670,7 @@ globalThis.customEditorInterfaces = {
     path: "projects",
     file: (pathname) => `projects/${pathname}/collection.json`,
     operation: Operation,
+    enumsMetaData: {},
   },
   themes: {
     type: "array",
@@ -667,7 +680,7 @@ globalThis.customEditorInterfaces = {
     file: (pathname) => `themes/${pathname}/catalog.json`,
     operation: Operation,
     customDataEncoder: (data) => ({
-      scheme: "https://github.com/stac-extensions/osc#theme",
+      scheme: "OSC:SCHEME:THEMES",
       concepts: [
         {
           id: data,
@@ -675,6 +688,7 @@ globalThis.customEditorInterfaces = {
       ],
     }),
     customDataDecoder: (data) => data.concepts[0].id,
+    enumsMetaData: {},
   },
   "osc:missions": {
     type: "array",
@@ -683,6 +697,7 @@ globalThis.customEditorInterfaces = {
     path: "eo-missions",
     file: (pathname) => `eo-missions/${pathname}/catalog.json`,
     operation: Operation,
+    enumsMetaData: {},
   },
   "osc:variables": {
     type: "array",
@@ -691,6 +706,7 @@ globalThis.customEditorInterfaces = {
     path: "variables",
     file: (pathname) => `variables/${pathname}/catalog.json`,
     operation: Operation,
+    enumsMetaData: {},
   },
   id: {
     type: "string",
@@ -721,11 +737,13 @@ globalThis.generateEnums = async (
         ...jsoneditor.expandSchema(jsoneditor.schema),
       };
       hidden.remove();
-      const propertyAvailable =
-        globalThis.customEditorInterfaces[property].func?.name ===
-          "OSCEditor" && schemaMetaDetails.schema.properties[property];
+      const editorInterface = globalThis.customEditorInterfaces[property];
+      let propertyAvailable =
+        editorInterface.func?.name === "OSCEditor" &&
+        schemaMetaDetails.schema.properties[property];
       if (propertyAvailable) {
-        let path = globalThis.customEditorInterfaces[property].path;
+        let path = editorInterface.path;
+        editorInterface.enumsMetaData = {};
         const catalog = await getFileDetails(
           session,
           `${path}/catalog.json`,
@@ -733,25 +751,30 @@ globalThis.generateEnums = async (
         );
         const links = JSON.parse(decoderBase64ToUtf8(catalog.content)).links;
         const enumValues = links
-          .map((link) =>
-            link.rel === "child"
-              ? {
-                  value: link.href.split("/")[1],
-                  text: link.title,
-                }
-              : null,
-          )
+          .map((link) => {
+            if (link.rel === "child") {
+              const value = link.href.split("/")[1];
+              const text = link.title;
+              editorInterface.enumsMetaData[value] = { text, value };
+              return editorInterface.customDataEncoder
+                ? editorInterface.customDataEncoder(value)
+                : value;
+            }
+            return null;
+          })
           .filter(Boolean);
+        const definition = propertyAvailable["$ref"]
+          ? schemaMetaDetails.schema.definitions[
+              propertyAvailable["$ref"].replace("#/allOf/0/definitions/", "")
+            ]
+          : {};
         if (propertyAvailable.items) {
           propertyAvailable.items.enum = enumValues;
+        } else if (definition.items) {
+          propertyAvailable.items = {};
+          propertyAvailable.items.enum = enumValues;
         } else {
-          propertyAvailable.enum = [
-            {
-              value: "",
-              text: "Select a value",
-            },
-            ...enumValues,
-          ];
+          propertyAvailable.enum = ["", ...enumValues];
         }
       }
     }
