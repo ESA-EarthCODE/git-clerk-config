@@ -472,13 +472,13 @@ class TemporalIntervalEditor extends JSONEditor.AbstractEditor {
     dateTimeStart.setAttribute("type", "date");
     dateTimeStart.setAttribute(
       "value",
-      startVals ? startVals[0].split("T")[0] : "2024-01-01T00:00",
+      startVals && startVals[0] !== null ? startVals[0].split("T")[0] : "2024-01-01T00:00",
     );
     const dateTimeEnd = document.createElement("input");
     dateTimeEnd.setAttribute("type", "date");
     dateTimeEnd.setAttribute(
       "value",
-      startVals ? startVals[1].split("T")[0] : "2024-01-01T00:00",
+      startVals && startVals[1] !== null ? startVals[1].split("T")[0] : "2024-01-01T00:00",
     );
     const temporalInterval = document.createElement("div");
     temporalInterval.appendChild(dateTimeStart);
