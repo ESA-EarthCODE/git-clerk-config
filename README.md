@@ -1,3 +1,7 @@
+**deprecated**: the config has been moved to EOxHub internal config.
+
+----
+
 # EarthCODE git-clerk config
 
 EarthCODE-specific config for [git-clerk](https://github.com/EOX-A/git-clerk).
