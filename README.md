@@ -1,6 +1,6 @@
 **deprecated**: the config has been moved to EOxHub internal config.
 
-----
+---
 
 # EarthCODE git-clerk config
 
