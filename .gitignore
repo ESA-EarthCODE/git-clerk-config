@@ -1,0 +1,4 @@
+.env
+node_modules
+config.prod.js
+config.staging.js

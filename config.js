@@ -9,14 +9,14 @@ globalThis.ghConfig = {
   githubRepo: "ESA-EarthCODE/open-science-catalog-metadata-testing",
   githubAuthToken: () => {
     return new Promise((resolve) => {
-      import(
-        "https://cdn.jsdelivr.net/npm/@luigi-project/client/luigi-client.js"
-      ).then(() => {
-        LuigiClient.addInitListener((initialContext) => {
-          const ghToken = initialContext.user.githubToken;
-          resolve(ghToken);
-        });
-      });
+      import("https://cdn.jsdelivr.net/npm/@luigi-project/client/luigi-client.js").then(
+        () => {
+          LuigiClient.addInitListener((initialContext) => {
+            const ghToken = initialContext.user.githubToken;
+            resolve(ghToken);
+          });
+        },
+      );
     });
   },
 };
@@ -472,13 +472,17 @@ class TemporalIntervalEditor extends JSONEditor.AbstractEditor {
     dateTimeStart.setAttribute("type", "date");
     dateTimeStart.setAttribute(
       "value",
-      startVals && startVals[0] !== null ? startVals[0].split("T")[0] : "2024-01-01T00:00",
+      startVals && startVals[0] !== null
+        ? startVals[0].split("T")[0]
+        : "2024-01-01T00:00",
     );
     const dateTimeEnd = document.createElement("input");
     dateTimeEnd.setAttribute("type", "date");
     dateTimeEnd.setAttribute(
       "value",
-      startVals && startVals[1] !== null ? startVals[1].split("T")[0] : "2024-01-01T00:00",
+      startVals && startVals[1] !== null
+        ? startVals[1].split("T")[0]
+        : "2024-01-01T00:00",
     );
     const temporalInterval = document.createElement("div");
     temporalInterval.appendChild(dateTimeStart);
