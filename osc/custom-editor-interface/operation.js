@@ -1,4 +1,4 @@
-import { capitalizeFirstLetter, decoderBase64ToUtf8 } from '../helpers.js';
+import { capitalizeFirstLetter, decoderBase64ToUtf8 } from "../helpers.js";
 
 export const selectFunc = (content, { file, title }) => {
   content.links = [
@@ -7,7 +7,7 @@ export const selectFunc = (content, { file, title }) => {
       rel: "related",
       href: `../../${file}`,
       type: "application/json",
-      title: `${capitalizeFirstLetter(file.split("/")[0].slice(0,-1))}: ${title}`,
+      title: `${capitalizeFirstLetter(file.split("/")[0].slice(0, -1))}: ${title}`,
     },
   ];
   return content;

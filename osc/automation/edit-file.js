@@ -1,4 +1,4 @@
-import { isBase64, isUrl, decoderBase64ToUtf8 } from '../helpers.js';
+import { isBase64, isUrl, decoderBase64ToUtf8 } from "../helpers.js";
 
 export default function editFileAutomation() {
   return {
@@ -48,5 +48,5 @@ export default function editFileAutomation() {
         path: (input) => input.file.split("/main/")[1],
       },
     ],
-  }
+  };
 }

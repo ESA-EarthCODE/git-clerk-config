@@ -17,31 +17,42 @@ app.get("/", (req, res) => {
   `);
 });
 
-app.get(`/osc-config.mjs`, async (req, res) => getFileContent(res, "osc-config.mjs"));
+app.get(`/osc-config.mjs`, async (req, res) =>
+  getFileContent(res, "osc-config.mjs"),
+);
 
 // Serve all files from the "osc" directory as ES modules
 const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
 const oscDir = path.join(__dirname, "osc");
-
 
 if (fs.existsSync(oscDir)) {
   const entries = fs.readdirSync(oscDir, { withFileTypes: true });
   for (const entry of entries) {
     if (entry.isFile()) {
       // Serve file directly inside osc/
-      app.get(`/osc/${entry.name}`, async (req, res) => await getFileContent(res, entry.name, "osc"));
+      app.get(
+        `/osc/${entry.name}`,
+        async (req, res) => await getFileContent(res, entry.name, "osc"),
+      );
     } else if (entry.isDirectory()) {
       const subDir = path.join(oscDir, entry.name);
       const subFiles = fs.readdirSync(subDir, { withFileTypes: true });
       for (const subFile of subFiles) {
         if (subFile.isFile()) {
           // Serve file inside osc/{dir}/
-          app.get(`/osc/${entry.name}/${subFile.name}`, async (req, res) => await getFileContent(res, subFile.name, path.join("osc", entry.name)));
+          app.get(
+            `/osc/${entry.name}/${subFile.name}`,
+            async (req, res) =>
+              await getFileContent(
+                res,
+                subFile.name,
+                path.join("osc", entry.name),
+              ),
+          );
         }
       }
     }
   }
 }
-
 
 app.listen(port, () => console.log(`The server is listening on port ${port}`));

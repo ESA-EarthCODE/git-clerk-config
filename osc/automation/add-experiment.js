@@ -1,22 +1,23 @@
-import { isBase64, isUrl, decoderBase64ToUtf8 } from '../helpers.js';
+import { isBase64, isUrl, decoderBase64ToUtf8 } from "../helpers.js";
 
 export default function addExperimentAutomation() {
   return {
     id: "add-experiment",
     title: "Add OSC experiment",
-    description: "Add a OSC files in the correct folder via id from file content",
+    description:
+      "Add a OSC files in the correct folder via id from file content",
     hidden: true,
     inputSchema: {
       type: "object",
       properties: {
         product: {
-          type: "string"
+          type: "string",
         },
         workflow: {
-          type: "string"
+          type: "string",
         },
         experiment: {
-          type: "string"
+          type: "string",
         },
       },
     },
@@ -62,7 +63,8 @@ export default function addExperimentAutomation() {
               rel: "child",
               href: `./${globalThis.productStore.id}/collection.json`,
               type: "application/json",
-              title: globalThis.productStore.title || globalThis.productStore.id,
+              title:
+                globalThis.productStore.title || globalThis.productStore.id,
             },
           ];
           return content;
@@ -70,43 +72,46 @@ export default function addExperimentAutomation() {
       },
       {
         type: "edit",
-        path: (input) => `/products/${globalThis.productStore.id}/collection.json`,
+        path: (input) =>
+          `/products/${globalThis.productStore.id}/collection.json`,
         transform: (content, input) => {
           if (!content.stac_extensions) {
             content.stac_extensions = [];
           }
-          
+
           // Extensions
           const requiredExtensions = [
             "https://stac-extensions.github.io/osc/v1.0.0/schema.json",
             "https://stac-extensions.github.io/themes/v1.0.0/schema.json",
             // "https://stac-extensions.github.io/cf/v0.2.0/schema.json"
           ];
-          requiredExtensions.forEach(extension => {
+          requiredExtensions.forEach((extension) => {
             if (!content.stac_extensions.includes(extension)) {
               content.stac_extensions.push(extension);
             }
-          })
+          });
 
           // Links
           if (content.links) {
-            const rootLink = content.links.find(l => l.rel === "root");
+            const rootLink = content.links.find((l) => l.rel === "root");
             if (rootLink) {
               rootLink.href = "../../catalog.json";
               rootLink.title = "Open Science Catalog";
             }
-            const parentLink = content.links.find(l => l.rel === "parent");
+            const parentLink = content.links.find((l) => l.rel === "parent");
             if (parentLink) {
               parentLink.href = "../catalog.json";
               parentLink.title = `Products`;
             }
-            const viaLink = content.links.find(l => l.rel === "via");
+            const viaLink = content.links.find((l) => l.rel === "via");
             if (!viaLink) {
               content.links.push({
-                "rel": "via",
-                "href": input.product?.startsWith("https://") ? input.product : "https://demo.esa.int/",
-                "title": "Access"
-              })
+                rel: "via",
+                href: input.product?.startsWith("https://")
+                  ? input.product
+                  : "https://demo.esa.int/",
+                title: "Access",
+              });
             }
           }
 
@@ -154,7 +159,8 @@ export default function addExperimentAutomation() {
               rel: "item",
               href: `./${globalThis.workflowStore.id}/record.json`,
               type: "application/json",
-              title: globalThis.workflowStore.title || globalThis.workflowStore.id,
+              title:
+                globalThis.workflowStore.title || globalThis.workflowStore.id,
             },
           ];
           return content;
@@ -162,27 +168,36 @@ export default function addExperimentAutomation() {
       },
       {
         type: "edit",
-        path: (input) => `/workflows/${globalThis.workflowStore.id}/record.json`,
+        path: (input) =>
+          `/workflows/${globalThis.workflowStore.id}/record.json`,
         transform: (content, input) => {
           // Links
           if (content.properties?.links) {
-            const rootLink = content.properties.links.find(l => l.rel === "root");
+            const rootLink = content.properties.links.find(
+              (l) => l.rel === "root",
+            );
             if (rootLink) {
               rootLink.href = "../../catalog.json";
               rootLink.title = "Open Science Catalog";
             }
-            const parentLink = content.properties.links.find(l => l.rel === "parent");
+            const parentLink = content.properties.links.find(
+              (l) => l.rel === "parent",
+            );
             if (parentLink) {
               parentLink.href = "../catalog.json";
               parentLink.title = `Workflows`;
             }
-            const viaLink = content.properties.links.find(l => l.rel === "via");
+            const viaLink = content.properties.links.find(
+              (l) => l.rel === "via",
+            );
             if (!viaLink) {
               content.properties.links.push({
-                "rel": "via",
-                "href": input.workflow?.startsWith("https://") ? input.workflow : "https://eoresults.esa.int/",
-                "title": "Access"
-              })
+                rel: "via",
+                href: input.workflow?.startsWith("https://")
+                  ? input.workflow
+                  : "https://eoresults.esa.int/",
+                title: "Access",
+              });
             }
           }
 
@@ -230,7 +245,9 @@ export default function addExperimentAutomation() {
               rel: "item",
               href: `./${globalThis.experimentStore.id}/record.json`,
               type: "application/json",
-              title: globalThis.experimentStore.title || globalThis.experimentStore.id,
+              title:
+                globalThis.experimentStore.title ||
+                globalThis.experimentStore.id,
             },
           ];
           return content;
@@ -238,27 +255,36 @@ export default function addExperimentAutomation() {
       },
       {
         type: "edit",
-        path: (input) => `/experiments/${globalThis.experimentStore.id}/record.json`,
+        path: (input) =>
+          `/experiments/${globalThis.experimentStore.id}/record.json`,
         transform: (content, input) => {
           // Links
           if (content.properties?.links) {
-            const rootLink = content.properties.links.find(l => l.rel === "root");
+            const rootLink = content.properties.links.find(
+              (l) => l.rel === "root",
+            );
             if (rootLink) {
               rootLink.href = "../../catalog.json";
               rootLink.title = "Open Science Catalog";
             }
-            const parentLink = content.properties.links.find(l => l.rel === "parent");
+            const parentLink = content.properties.links.find(
+              (l) => l.rel === "parent",
+            );
             if (parentLink) {
               parentLink.href = "../catalog.json";
               parentLink.title = `Experiments`;
             }
-            const viaLink = content.properties.links.find(l => l.rel === "via");
+            const viaLink = content.properties.links.find(
+              (l) => l.rel === "via",
+            );
             if (!viaLink) {
               content.properties.links.push({
-                "rel": "via",
-                "href": input.experiment?.startsWith("https://") ? input.experiment : "https://eoresults.esa.int/",
-                "title": "Access"
-              })
+                rel: "via",
+                href: input.experiment?.startsWith("https://")
+                  ? input.experiment
+                  : "https://eoresults.esa.int/",
+                title: "Access",
+              });
             }
           }
 
@@ -266,5 +292,5 @@ export default function addExperimentAutomation() {
         },
       },
     ],
-  }
+  };
 }

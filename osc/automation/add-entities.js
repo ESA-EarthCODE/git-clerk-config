@@ -1,4 +1,4 @@
-import { slugify } from '../helpers.js';
+import { slugify } from "../helpers.js";
 
 const entities = [
   {
@@ -9,11 +9,11 @@ const entities = [
     initValue: (input) => ({
       id: slugify(input.title),
       title: input.title,
-      created: new Date().toISOString().replace(/\.[0-9]{3}/, ''),
+      created: new Date().toISOString().replace(/\.[0-9]{3}/, ""),
       "osc:status": "completed",
       type: "Collection",
       "osc:type": "product",
-    })
+    }),
   },
   {
     title: "Project",
@@ -26,83 +26,53 @@ const entities = [
       "osc:status": "completed",
       type: "Collection",
       "osc:type": "project",
-    })
+    }),
   },
-  {
-    title: "Experiment",
-    path: "experiments",
-    fileName: "record.json",
-    relType: "item",
-    initValue: (input) => ({
-      id: slugify(input.title),
-      type: "Feature",
-      geometry: null,
-      properties: {
-        title: input.title,
-        created: new Date().toISOString().replace(/\.[0-9]{3}/, ''),
-      },
-    })
-  },
-  {
-    title: "Workflow",
-    path: "workflows",
-    fileName: "record.json",
-    relType: "item",
-    initValue: (input) => ({
-      id: slugify(input.title),
-      type: "Feature",
-      geometry: null,
-      properties: {
-        title: input.title,
-        created: new Date().toISOString().replace(/\.[0-9]{3}/, ''),
-      },
-    })
-  },
-]
+];
 
 export default function addEntitiesAutomation() {
-  const createEntitiesFor = [entities[0], entities[1]]
-  return createEntitiesFor.map((entity) => ({
+  return entities.map((entity) => ({
     title: `Add ${entity.title}`,
-    description:
-      `Bootstrap a new OSC ${entity.title} with the correct folder structure and ID.`,
+    description: `Bootstrap a new OSC ${entity.title} with the correct folder structure and ID.`,
     inputSchema: {
-        type: "object",
-        properties: {
-          title: {
-            title: `${entity.title} title`,
-            type: "string",
-            minLength: 1,
-          },
+      type: "object",
+      properties: {
+        title: {
+          title: `${entity.title} title`,
+          type: "string",
+          minLength: 1,
         },
-        required: ["title"],
       },
-      steps: [
-        {
-          type: "add",
-          path: (input) => `/${entity.path}/${slugify(input.title)}/${entity.fileName}`,
-          content: (input) => entity.initValue(input),
+      required: ["title"],
+    },
+    steps: [
+      {
+        type: "add",
+        path: (input) =>
+          `/${entity.path}/${slugify(input.title)}/${entity.fileName}`,
+        content: (input) => entity.initValue(input),
+      },
+      {
+        type: "edit",
+        path: `/${entity.path}/catalog.json`,
+        transform: (content, input) => {
+          content.links = [
+            ...content.links,
+            {
+              rel: entity.relType,
+              href: `./${slugify(input.title)}/${entity.fileName}`,
+              type: "application/json",
+              title: input.title,
+            },
+          ];
+          return content;
         },
-        {
-          type: "edit",
-          path: `/${entity.path}/catalog.json`,
-          transform: (content, input) => {
-            content.links = [
-              ...content.links,
-              {
-                rel: entity.relType,
-                href: `./${slugify(input.title)}/${entity.fileName}`,
-                type: "application/json",
-                title: input.title,
-              },
-            ];
-            return content;
-          },
-        },
-        {
-          type: "navigate",
-          path: (input) => `/${entity.path}/${slugify(input.title)}/${entity.fileName}`,
-        },
-      ],
+      },
+      {
+        type: "navigate",
+        path: (input) =>
+          `/${entity.path}/${slugify(input.title)}/${entity.fileName}`,
+      },
+    ],
   }));
 }

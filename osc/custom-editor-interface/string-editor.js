@@ -5,8 +5,10 @@ class OSCStringEditor extends StringEditor {
     super.build();
     if (this.key === "updated") {
       setTimeout(() => {
-        this.setValueToInputField(new Date().toISOString().replace(/\.[0-9]{3}/, ''));
-      })
+        this.setValueToInputField(
+          new Date().toISOString().replace(/\.[0-9]{3}/, ""),
+        );
+      });
     }
   }
 }
