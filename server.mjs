@@ -1,13 +1,11 @@
 import express from "express";
-import { readFile } from "fs/promises";
-import { fileURLToPath } from "url";
-import { dirname, join } from "path";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+import getFileContent from "./get-file-content.js";
+import fs from "fs";
+import path from "path";
+import url from "url";
 
 const app = express();
-const port = 4001;
+const port = 4004;
 
 app.get("/", (req, res) => {
   res.setHeader("Content-Type", "text/plain");
@@ -19,16 +17,31 @@ app.get("/", (req, res) => {
   `);
 });
 
-app.get("/osc-config.mjs", async (req, res) => {
-  try {
-    const filePath = join(__dirname, "osc-config.mjs");
-    const content = await readFile(filePath, "utf-8");
-    res.setHeader("Content-Type", "application/javascript");
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.send(content);
-  } catch (error) {
-    res.status(500).send("Error reading osc-config.mjs");
+app.get(`/osc-config.mjs`, async (req, res) => getFileContent(res, "osc-config.mjs"));
+
+// Serve all files from the "osc" directory as ES modules
+const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
+const oscDir = path.join(__dirname, "osc");
+
+
+if (fs.existsSync(oscDir)) {
+  const entries = fs.readdirSync(oscDir, { withFileTypes: true });
+  for (const entry of entries) {
+    if (entry.isFile()) {
+      // Serve file directly inside osc/
+      app.get(`/osc/${entry.name}`, async (req, res) => await getFileContent(res, entry.name, "osc"));
+    } else if (entry.isDirectory()) {
+      const subDir = path.join(oscDir, entry.name);
+      const subFiles = fs.readdirSync(subDir, { withFileTypes: true });
+      for (const subFile of subFiles) {
+        if (subFile.isFile()) {
+          // Serve file inside osc/{dir}/
+          app.get(`/osc/${entry.name}/${subFile.name}`, async (req, res) => await getFileContent(res, subFile.name, path.join("osc", entry.name)));
+        }
+      }
+    }
   }
-});
+}
+
 
 app.listen(port, () => console.log(`The server is listening on port ${port}`));
