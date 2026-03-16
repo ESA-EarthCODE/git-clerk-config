@@ -166,16 +166,14 @@ class OSCEditor extends JSONEditor.AbstractEditor {
                 : (panel.style.display = "none"),
             );
           // make current tab highlighted again
-          tabsHolder
-            .querySelectorAll(".je-tab--top")
-            .forEach((tab) =>
-              tab.getAttribute("id") === tabId
-                ? Object.assign(tab.style, { opacity: 1, background: "white" })
-                : Object.assign(tab.style, {
-                    opacity: 0.5,
-                    background: "unset",
-                  }),
-            );
+          tabsHolder.querySelectorAll(".je-tab--top").forEach((tab) =>
+            tab.getAttribute("id") === tabId
+              ? Object.assign(tab.style, { opacity: 1, background: "white" })
+              : Object.assign(tab.style, {
+                  opacity: 0.5,
+                  background: "unset",
+                }),
+          );
         }
 
         // Scroll the input into view and hide the loader after a delay
