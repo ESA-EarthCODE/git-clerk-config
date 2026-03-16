@@ -1,4 +1,4 @@
-import { decoderBase64ToUtf8 } from '../helpers.js';
+import { decoderBase64ToUtf8 } from "../helpers.js";
 
 const fetchFileContent = async (filePath) => {
   const token = await globalThis.ghConfig.config.auth;
@@ -24,7 +24,11 @@ const fetchFileContent = async (filePath) => {
   return decodedContent;
 };
 
-export default async function handleFileContentUpdate(value, content, editorInterface) {
+export default async function handleFileContentUpdate(
+  value,
+  content,
+  editorInterface,
+) {
   const filename = editorInterface.file(value);
   const fileContent = await fetchFileContent(filename);
   const title = fileContent.title;
@@ -33,4 +37,4 @@ export default async function handleFileContentUpdate(value, content, editorInte
     file: filename,
     title: title,
   });
-};
+}

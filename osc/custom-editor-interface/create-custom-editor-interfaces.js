@@ -1,9 +1,9 @@
-import OSCEditor from './osc-editor.js';
-import TemporalIntervalEditor from './temporal-interval-editor.js';
-import Operation from './operation.js';
-import OSCStringEditor from './string-editor.js';
+import OSCEditor from "./osc-editor.js";
+import TemporalIntervalEditor from "./temporal-interval-editor.js";
+import Operation from "./operation.js";
+import OSCStringEditor from "./string-editor.js";
 
-export default function createCustomEditorInterfaces () {
+export default function createCustomEditorInterfaces() {
   return {
     "osc:project": {
       type: "string",
@@ -68,11 +68,6 @@ export default function createCustomEditorInterfaces () {
       operation: Operation,
       enumsMetaData: {},
     },
-    // id: {
-    //   type: "string",
-    //   format: "uuid",
-    //   func: UUIDEditor,
-    // },
     temporalInterval: {
       type: "array",
       format: "temporal-interval",
@@ -82,6 +77,6 @@ export default function createCustomEditorInterfaces () {
       type: "string",
       format: "date-time",
       func: OSCStringEditor,
-    }
+    },
   };
 }

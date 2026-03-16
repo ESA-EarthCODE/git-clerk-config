@@ -44,13 +44,17 @@ class TemporalIntervalEditor extends JSONEditor.AbstractEditor {
     dateTimeStart.setAttribute("type", "date");
     dateTimeStart.setAttribute(
       "value",
-      startVals && startVals[0] !== null ? startVals[0].split("T")[0] : "2024-01-01T00:00",
+      startVals && startVals[0] !== null
+        ? startVals[0].split("T")[0]
+        : "2024-01-01T00:00",
     );
     const dateTimeEnd = document.createElement("input");
     dateTimeEnd.setAttribute("type", "date");
     dateTimeEnd.setAttribute(
       "value",
-      startVals && startVals[1] !== null ? startVals[1].split("T")[0] : "2024-01-01T00:00",
+      startVals && startVals[1] !== null
+        ? startVals[1].split("T")[0]
+        : "2024-01-01T00:00",
     );
     const temporalInterval = document.createElement("div");
     temporalInterval.appendChild(dateTimeStart);
@@ -103,22 +107,27 @@ class TemporalIntervalEditor extends JSONEditor.AbstractEditor {
   }
 
   showValidationErrors(errors) {
-    if (this.jsoneditor.options.show_errors === 'always') { } else if (!this.is_dirty && this.previous_error_setting === this.jsoneditor.options.show_errors) return
+    if (this.jsoneditor.options.show_errors === "always") {
+    } else if (
+      !this.is_dirty &&
+      this.previous_error_setting === this.jsoneditor.options.show_errors
+    )
+      return;
 
-    this.previous_error_setting = this.jsoneditor.options.show_errors
+    this.previous_error_setting = this.jsoneditor.options.show_errors;
 
     const addMessage = (messages, error) => {
       if (error.path === this.path) {
-        messages.push(error.message)
+        messages.push(error.message);
       }
-      return messages
-    }
-    const messages = errors.reduce(addMessage, [])
+      return messages;
+    };
+    const messages = errors.reduce(addMessage, []);
 
     if (messages.length) {
-      this.theme.addInputError(this.input, `${messages.join('. ')}.`)
+      this.theme.addInputError(this.input, `${messages.join(". ")}.`);
     } else {
-      this.theme.removeInputError(this.input)
+      this.theme.removeInputError(this.input);
     }
   }
 }

@@ -1,10 +1,10 @@
-import { decoderBase64ToUtf8 } from '../helpers.js';
+import { decoderBase64ToUtf8 } from "../helpers.js";
 
-export default async function createGenerateEnums (
+export default async function createGenerateEnums(
   schemaMetaDetails,
   session,
   cache,
-  { getFileDetails }
+  { getFileDetails },
 ) {
   if (schemaMetaDetails.schema.allOf) {
     for (const property of Object.keys(globalThis.customEditorInterfaces)) {
@@ -20,8 +20,10 @@ export default async function createGenerateEnums (
       const editorInterface = globalThis.customEditorInterfaces[property];
       let propertyAvailable =
         editorInterface.func?.name === "OSCEditor" &&
-        (schemaMetaDetails.schema.properties[property]
-          || schemaMetaDetails.schema.properties?.properties?.properties[property]);
+        (schemaMetaDetails.schema.properties[property] ||
+          schemaMetaDetails.schema.properties?.properties?.properties[
+            property
+          ]);
       if (propertyAvailable) {
         let path = editorInterface.path;
         editorInterface.enumsMetaData = {};

@@ -1,4 +1,4 @@
-import { isBase64, isUrl, decoderBase64ToUtf8 } from '../helpers.js';
+import { isBase64, isUrl, decoderBase64ToUtf8 } from "../helpers.js";
 
 export default function addVarProjProdBundleAutomation() {
   return {
@@ -156,7 +156,8 @@ export default function addVarProjProdBundleAutomation() {
               rel: "child",
               href: `./${globalThis.projectStore.id}/collection.json`,
               type: "application/json",
-              title: globalThis.projectStore.title || globalThis.projectStore.id,
+              title:
+                globalThis.projectStore.title || globalThis.projectStore.id,
             },
           ];
           return content;
@@ -248,7 +249,8 @@ export default function addVarProjProdBundleAutomation() {
               rel: "child",
               href: `./${globalThis.productStore.id}/collection.json`,
               type: "application/json",
-              title: globalThis.productStore.title || globalThis.productStore.id,
+              title:
+                globalThis.productStore.title || globalThis.productStore.id,
             },
           ];
           return content;
@@ -304,5 +306,5 @@ export default function addVarProjProdBundleAutomation() {
           `/products/${globalThis.productStore.id}/collection.json`,
       },
     ],
-  }
+  };
 }

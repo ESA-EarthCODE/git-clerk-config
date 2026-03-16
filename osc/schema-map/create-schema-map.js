@@ -9,7 +9,7 @@ export default function createSchemaMap() {
         disable_properties: false,
       },
     },
-  }
+  };
 
   return [
     {
@@ -76,4 +76,4 @@ export default function createSchemaMap() {
       url: "https://esa-earthcode.github.io/open-science-catalog-validation/schemas/workflows/children.json",
     },
   ];
-};
+}

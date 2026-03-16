@@ -1,10 +1,16 @@
-import { isBase64, isUrl, capitalizeFirstLetter, decoderBase64ToUtf8 } from '../helpers.js';
+import {
+  isBase64,
+  isUrl,
+  capitalizeFirstLetter,
+  decoderBase64ToUtf8,
+} from "../helpers.js";
 
 export default function addFileAutomation() {
   return {
     id: "add-file",
     title: "Add external OSC file",
-    description: "Add a OSC file in the correct folder via id from file content",
+    description:
+      "Add a OSC file in the correct folder via id from file content",
     hidden: true,
     inputSchema: {
       type: "object",
@@ -14,8 +20,8 @@ export default function addFileAutomation() {
           minLength: 1,
         },
         type: {
-          type: "string"
-        }
+          type: "string",
+        },
       },
       required: ["file", "type"],
     },
@@ -56,63 +62,74 @@ export default function addFileAutomation() {
       },
       {
         type: "edit",
-        path: (input) => `/${input.type}s/${automationContentStore.id}/${input.type === "experiment" || input.type === "workflow" ? "record" : "collection"}.json`,
+        path: (input) =>
+          `/${input.type}s/${automationContentStore.id}/${input.type === "experiment" || input.type === "workflow" ? "record" : "collection"}.json`,
         transform: (content, input) => {
           if (!content.stac_extensions) {
             content.stac_extensions = [];
           }
-          
+
           // Extensions
           const requiredExtensions = [
             "https://stac-extensions.github.io/osc/v1.0.0/schema.json",
             "https://stac-extensions.github.io/themes/v1.0.0/schema.json",
             // "https://stac-extensions.github.io/cf/v0.2.0/schema.json"
           ];
-          requiredExtensions.forEach(extension => {
+          requiredExtensions.forEach((extension) => {
             if (!content.stac_extensions.includes(extension)) {
               content.stac_extensions.push(extension);
             }
-          })
+          });
 
           // Links
           if (content.links) {
-            const rootLink = content.links.find(l => l.rel === "root");
+            const rootLink = content.links.find((l) => l.rel === "root");
             if (rootLink) {
               rootLink.href = "../../catalog.json";
               rootLink.title = "Open Science Catalog";
             }
-            const parentLink = content.links.find(l => l.rel === "parent");
+            const parentLink = content.links.find((l) => l.rel === "parent");
             if (parentLink) {
               parentLink.href = "../catalog.json";
               parentLink.title = `${capitalizeFirstLetter(input.type)}s`;
             }
-            const viaLink = content.links.find(l => l.rel === "via");
+            const viaLink = content.links.find((l) => l.rel === "via");
             if (!viaLink) {
               content.links.push({
-                "rel": "via",
-                "href": input.file?.startsWith("https://") ? input.file : "https://eoresults.esa.int/",
-                "title": "Access"
-              })
+                rel: "via",
+                href: input.file?.startsWith("https://")
+                  ? input.file
+                  : "https://eoresults.esa.int/",
+                title: "Access",
+              });
             }
           }
           if (content.properties?.links) {
-            const rootLink = content.properties.links.find(l => l.rel === "root");
+            const rootLink = content.properties.links.find(
+              (l) => l.rel === "root",
+            );
             if (rootLink) {
               rootLink.href = "../../catalog.json";
               rootLink.title = "Open Science Catalog";
             }
-            const parentLink = content.properties.links.find(l => l.rel === "parent");
+            const parentLink = content.properties.links.find(
+              (l) => l.rel === "parent",
+            );
             if (parentLink) {
               parentLink.href = "../catalog.json";
               parentLink.title = `${capitalizeFirstLetter(input.type)}s`;
             }
-            const viaLink = content.properties.links.find(l => l.rel === "via");
+            const viaLink = content.properties.links.find(
+              (l) => l.rel === "via",
+            );
             if (!viaLink) {
               content.properties.links.push({
-                "rel": "via",
-                "href": input.file?.startsWith("https://") ? input.file : "https://eoresults.esa.int/",
-                "title": "Access"
-              })
+                rel: "via",
+                href: input.file?.startsWith("https://")
+                  ? input.file
+                  : "https://eoresults.esa.int/",
+                title: "Access",
+              });
             }
           }
 
@@ -126,7 +143,10 @@ export default function addFileAutomation() {
           content.links = [
             ...content.links,
             {
-              rel: input.type === "experiment" || input.type === "workflow" ? "item" : "child",
+              rel:
+                input.type === "experiment" || input.type === "workflow"
+                  ? "item"
+                  : "child",
               href: `./${automationContentStore.id}/${input.type === "experiment" || input.type === "workflow" ? "record" : "collection"}.json`,
               type: "application/json",
               title: automationContentStore.title || automationContentStore.id,
@@ -137,8 +157,9 @@ export default function addFileAutomation() {
       },
       {
         type: "navigate",
-        path: (input) => `/${input.type}s/${automationContentStore.id}/${input.type === "experiment" || input.type === "workflow" ? "record" : "collection"}.json`,
+        path: (input) =>
+          `/${input.type}s/${automationContentStore.id}/${input.type === "experiment" || input.type === "workflow" ? "record" : "collection"}.json`,
       },
     ],
-  }
+  };
 }

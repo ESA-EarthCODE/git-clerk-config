@@ -1,5 +1,5 @@
-import handleFileContentUpdate from './handle-file-content-update.js';
-import { handleLoaderPostMessage } from '../helpers.js';
+import handleFileContentUpdate from "./handle-file-content-update.js";
+import { handleLoaderPostMessage } from "../helpers.js";
 
 // Example of how to build a custom editor can be found here:
 // https://github.com/json-editor/json-editor/blob/master/docs/custom-editor.html
@@ -153,13 +153,29 @@ class OSCEditor extends JSONEditor.AbstractEditor {
         const tabPanelsHolder = this.input.closest(".je-tabholder--clear");
         if (tabPanelsHolder) {
           const tabPanel = this.input.closest(".je-indented-panel");
-          const tabsHolder = tabPanelsHolder.parentElement.querySelector(".je-tabholder--top");
+          const tabsHolder =
+            tabPanelsHolder.parentElement.querySelector(".je-tabholder--top");
           const tabId = tabPanel.getAttribute("id");
 
           // Make current tab content visible again
-          tabPanelsHolder.querySelectorAll(".je-tabholder--clear > .je-indented-panel").forEach(panel => panel === tabPanel ? panel.style.display = "block" : panel.style.display = "none");
+          tabPanelsHolder
+            .querySelectorAll(".je-tabholder--clear > .je-indented-panel")
+            .forEach((panel) =>
+              panel === tabPanel
+                ? (panel.style.display = "block")
+                : (panel.style.display = "none"),
+            );
           // make current tab highlighted again
-          tabsHolder.querySelectorAll(".je-tab--top").forEach(tab => tab.getAttribute("id") === tabId ? Object.assign(tab.style, { opacity: 1, background: "white" }) : Object.assign(tab.style, { opacity: 0.5, background: "unset" }));
+          tabsHolder
+            .querySelectorAll(".je-tab--top")
+            .forEach((tab) =>
+              tab.getAttribute("id") === tabId
+                ? Object.assign(tab.style, { opacity: 1, background: "white" })
+                : Object.assign(tab.style, {
+                    opacity: 0.5,
+                    background: "unset",
+                  }),
+            );
         }
 
         // Scroll the input into view and hide the loader after a delay
@@ -200,23 +216,28 @@ class OSCEditor extends JSONEditor.AbstractEditor {
     super.destroy();
   }
 
-  showValidationErrors (errors) {
-    if (this.jsoneditor.options.show_errors === 'always') { } else if (!this.is_dirty && this.previous_error_setting === this.jsoneditor.options.show_errors) return
+  showValidationErrors(errors) {
+    if (this.jsoneditor.options.show_errors === "always") {
+    } else if (
+      !this.is_dirty &&
+      this.previous_error_setting === this.jsoneditor.options.show_errors
+    )
+      return;
 
-    this.previous_error_setting = this.jsoneditor.options.show_errors
+    this.previous_error_setting = this.jsoneditor.options.show_errors;
 
     const addMessage = (messages, error) => {
       if (error.path === this.path) {
-        messages.push(error.message)
+        messages.push(error.message);
       }
-      return messages
-    }
-    const messages = errors.reduce(addMessage, [])
+      return messages;
+    };
+    const messages = errors.reduce(addMessage, []);
 
     if (messages.length) {
-      this.theme.addInputError(this.input, `${messages.join('. ')}.`)
+      this.theme.addInputError(this.input, `${messages.join(". ")}.`);
     } else {
-      this.theme.removeInputError(this.input)
+      this.theme.removeInputError(this.input);
     }
   }
 }
