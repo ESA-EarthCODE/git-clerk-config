@@ -1,6 +1,6 @@
 export default function createSchemaMap() {
   const preview = new URL(import.meta.url).href.replace(
-    "/create-schema-map.js",
+    "/osc/schema-map/create-schema-map.js",
     "/osc.html",
   );
   const schemaDefaults = {
