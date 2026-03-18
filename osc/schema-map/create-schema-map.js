@@ -1,6 +1,10 @@
 export default function createSchemaMap() {
+  const preview = new URL(import.meta.url).href.replace(
+    "/osc-config.mjs",
+    "/osc.html",
+  );
   const schemaDefaults = {
-    preview: `${globalThis.basePath}/osc.html`,
+    preview: preview,
     content: {},
     jsonform: {
       propertiesToggle: true,
