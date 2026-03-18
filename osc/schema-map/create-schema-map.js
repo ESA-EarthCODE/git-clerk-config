@@ -1,6 +1,6 @@
 export default function createSchemaMap() {
   const schemaDefaults = {
-    preview: `${new URL(import.meta.url).origin}/osc.html`,
+    preview: `${globalThis.basePath}/osc.html`,
     content: {},
     jsonform: {
       propertiesToggle: true,
