@@ -77,46 +77,12 @@ An async function that dynamically fetches catalog data from GitHub at runtime t
 
 A configurable object that defines translation messages for the Git Clerk, exposed via `globalThis.i18n` and supporting languages out of the box and easily extendable to additional languages by adding message sets keyed by locale code.
 
-## Getting Started
-
-### Prerequisites
-
-- [Node.js](https://nodejs.org/) (LTS recommended)
-- npm
-
-### Installation
-
-```bash
-npm install
-```
-
-### Development
-
-```bash
-npm run dev
-```
-
-Starts the server at `http://localhost:4004` with file watching (auto-reload on changes).
-
-### Production
-
-```bash
-npm start
-```
-
-### Docker
-
-```bash
-docker build -t git-clerk-config .
-docker run -p 4004:4004 git-clerk-config
-```
-
 ## Usage
 
-Once the server is running, the configuration can be loaded by git-clerk via dynamic import:
+The configuration can be loaded by git-clerk via dynamic import:
 
 ```javascript
-import OSCConfiguration from "http://localhost:4004/osc-config.mjs"; // Deployed URL to osc-config.mjs
+import OSCConfiguration from "https://esa-earthcode.github.io/git-clerk-config/osc-config.mjs";
 
 // Apply ghConfig before OSCConfiguration
 OSCConfiguration();

@@ -4,15 +4,10 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "start": "node server.mjs",
-    "dev": "node --watch server.mjs",
     "format": "prettier --write ."
   },
   "author": "EOX",
   "license": "MIT",
-  "dependencies": {
-    "express": "^5.2.1"
-  },
   "devDependencies": {
     "@eox/eslint-config": "^2.0.0"
   }
