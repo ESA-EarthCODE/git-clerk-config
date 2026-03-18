@@ -34,6 +34,8 @@ git-clerk-config/
 │   │   └── handle-file-content-update.js # Fetches file content from GitHub on selection
 │   └── generate-enums/
 │       └── create-generate-enums.js      # Dynamic enum population from catalog data
+│   └── i18n/
+│       └── create-i18n.js              # Add 18n config related to OSC
 ├── Dockerfile
 └── package.json
 ```
@@ -70,6 +72,10 @@ Custom form editors built on top of `@json-editor/json-editor` for specialized S
 ### Generate Enums (`globalThis.generateEnums`)
 
 An async function that dynamically fetches catalog data from GitHub at runtime to populate dropdown options, ensuring the editor always shows current entity options.
+
+### Internationalization (i18n) (`globalThis.i18n`)
+
+A configurable object that defines translation messages for the Git Clerk, exposed via `globalThis.i18n` and supporting languages out of the box and easily extendable to additional languages by adding message sets keyed by locale code.
 
 ## Getting Started
 

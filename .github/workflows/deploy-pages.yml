@@ -4,9 +4,9 @@ on:
   workflow_dispatch:
     inputs:
       branch:
-        description: 'Branch to deploy'
+        description: "Branch to deploy"
         required: true
-        default: 'main'
+        default: "main"
         type: string
 
 permissions:
@@ -37,7 +37,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: '.'
+          path: "."
 
       - name: Deploy to GitHub Pages
         id: deployment
