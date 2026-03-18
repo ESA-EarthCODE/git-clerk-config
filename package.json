@@ -1,0 +1,14 @@
+{
+  "name": "git-clerk-config",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "format": "prettier --write ."
+  },
+  "author": "EOX",
+  "license": "MIT",
+  "devDependencies": {
+    "@eox/eslint-config": "^2.0.0"
+  }
+}
