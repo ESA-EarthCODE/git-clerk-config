@@ -10,8 +10,6 @@ Rather than bundling configuration into the git-clerk editor itself, this projec
 
 ```
 git-clerk-config/
-├── server.mjs                  # Express HTTP server (entry point, port 4004)
-├── get-file-content.js         # File-serving utility with CORS headers
 ├── osc-config.mjs              # Main OSC configuration module (browser entry point)
 ├── osc.html                    # STAC Browser preview iframe page to preview
 ├── osc/                        # Modular configuration modules
@@ -36,7 +34,6 @@ git-clerk-config/
 │       └── create-generate-enums.js      # Dynamic enum population from catalog data
 │   └── i18n/
 │       └── create-i18n.js              # Add 18n config related to OSC
-├── Dockerfile
 └── package.json
 ```
 
