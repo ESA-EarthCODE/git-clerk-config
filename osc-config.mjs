@@ -1,5 +1,93 @@
 import GitClerkConfiguration from "./git-clerk-config.mjs";
 
+const EDITOR_CONFIG = {
+  "osc:project": {
+    type: "string",
+    format: "osc-project",
+    func: "SelectEditor",
+    path: "projects",
+    file: (pathname) => `projects/${pathname}/collection.json`,
+    operation: true,
+    enumsMetaData: {},
+  },
+  "osc:experiment": {
+    type: "string",
+    format: "osc-experiment",
+    func: "SelectEditor",
+    path: "experiments",
+    file: (pathname) => `experiments/${pathname}/record.json`,
+    operation: true,
+    enumsMetaData: {},
+  },
+  themes: {
+    type: "array",
+    format: "themes",
+    func: "SelectEditor",
+    path: "themes",
+    file: (pathname) => `themes/${pathname}/catalog.json`,
+    operation: true,
+    customDataEncoder: (data) => ({
+      scheme: "https://github.com/stac-extensions/osc#theme",
+      concepts: [
+        {
+          id: data,
+        },
+      ],
+    }),
+    customDataDecoder: (data) => data.concepts[0].id,
+    enumsMetaData: {},
+  },
+  "osc:missions": {
+    type: "array",
+    format: "osc-missions",
+    func: "SelectEditor",
+    path: "eo-missions",
+    file: (pathname) => `eo-missions/${pathname}/catalog.json`,
+    operation: true,
+    enumsMetaData: {},
+  },
+  "osc:variables": {
+    type: "array",
+    format: "osc-variables",
+    func: "SelectEditor",
+    path: "variables",
+    file: (pathname) => `variables/${pathname}/catalog.json`,
+    operation: true,
+    enumsMetaData: {},
+  },
+  "osc:workflows": {
+    type: "array",
+    format: "osc-workflows",
+    func: "SelectEditor",
+    path: "workflows",
+    file: (pathname) => `workflows/${pathname}/record.json`,
+    operation: true,
+    enumsMetaData: {},
+  },
+  temporalInterval: {
+    type: "array",
+    format: "temporal-interval",
+    func: "TemporalIntervalEditor",
+  },
+  updated: {
+    type: "string",
+    format: "date-time",
+    func: "UpdateStringEditor",
+  },
+};
+
+const EDITOR_OPERATION_ON = [
+  {
+    type: "Collection",
+    "osc:type": "product",
+  },
+  {
+    type: "Collection",
+    "osc:type": "project",
+    linkRel: "related",
+  },
+];
+
 const SCHEMA = [
   {
     path: "/eo-missions/catalog.json",
@@ -86,6 +174,8 @@ export default function OSCConfiguration(config = {}) {
   GitClerkConfiguration({
     schema: SCHEMA,
     defaultSchemaDetails: defaultSchemaDetails,
+    editors: EDITOR_CONFIG,
+    editorOperationOn: EDITOR_OPERATION_ON,
     ...config,
   });
 }

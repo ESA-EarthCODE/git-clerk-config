@@ -19,7 +19,7 @@ export default async function createGenerateEnums(
       hidden.remove();
       const editorInterface = globalThis.customEditorInterfaces[property];
       let propertyAvailable =
-        editorInterface.func?.name === "OSCEditor" &&
+        editorInterface.func?.name === "SelectEditor" &&
         (schemaMetaDetails.schema.properties[property] ||
           schemaMetaDetails.schema.properties?.properties?.properties[
             property

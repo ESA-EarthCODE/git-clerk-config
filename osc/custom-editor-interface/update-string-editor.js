@@ -1,6 +1,6 @@
 import { StringEditor } from "https://cdn.jsdelivr.net/npm/@json-editor/json-editor@latest/src/editors/string.js/+esm";
 
-class OSCStringEditor extends StringEditor {
+class UpdateStringEditor extends StringEditor {
   build() {
     super.build();
     if (this.key === "updated") {
@@ -13,4 +13,4 @@ class OSCStringEditor extends StringEditor {
   }
 }
 
-export default OSCStringEditor;
+export default UpdateStringEditor;

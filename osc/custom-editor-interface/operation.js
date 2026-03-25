@@ -18,17 +18,6 @@ export const unselectFunc = (content, { file }) => {
   return content;
 };
 
-export const operationOn = [
-  {
-    type: "Collection",
-    "osc:type": "product",
-  },
-  {
-    type: "Collection",
-    "osc:type": "project",
-  },
-];
-
 export const saveFunc = async (
   newIds,
   oldIds,
@@ -94,10 +83,16 @@ export const saveFunc = async (
       if (fileDetails.status !== "error") {
         let content = JSON.parse(decoderBase64ToUtf8(fileDetails.content));
         // Add a new child link to the file's links array
+        const matchedOperation = customEditorInterface.operation.on.find(
+          (operation) =>
+            customEditorInterface.parentFileContent.type === operation.type &&
+            customEditorInterface.parentFileContent["osc:type"] ===
+              operation["osc:type"],
+        );
         content.links = [
           ...content.links,
           {
-            rel: childPath.includes("projects/") ? "related" : "child",
+            rel: matchedOperation?.linkRel || "child",
             href: `../../${childPath}`,
             type: "application/json",
             title: childTitle,
@@ -125,7 +120,6 @@ export const saveFunc = async (
 };
 
 const Operation = {
-  on: operationOn,
   select: selectFunc,
   unselect: unselectFunc,
   save: saveFunc,

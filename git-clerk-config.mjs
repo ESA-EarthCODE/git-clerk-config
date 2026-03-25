@@ -9,7 +9,7 @@ import createI18n from "./osc/i18n/create-i18n.js";
 export default function GitClerkConfiguration(config = {}) {
   globalThis.schemaMap = createSchemaMap(config);
   globalThis.automation = createAutomation();
-  globalThis.customEditorInterfaces = createCustomEditorInterfaces();
+  globalThis.customEditorInterfaces = createCustomEditorInterfaces(config);
   globalThis.generateEnums = createGenerateEnums;
   globalThis.i18n = createI18n();
 
