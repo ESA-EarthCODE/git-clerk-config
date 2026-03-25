@@ -11,7 +11,7 @@ export default function GitClerkConfiguration(config = {}) {
   globalThis.automation = createAutomation();
   globalThis.customEditorInterfaces = createCustomEditorInterfaces(config);
   globalThis.generateEnums = createGenerateEnums;
-  globalThis.i18n = createI18n();
+  globalThis.i18n = createI18n(config);
 
   globalThis.gitClerkConfig = {
     schemaMap: globalThis.schemaMap,

@@ -154,6 +154,18 @@ const SCHEMA = [
   },
 ];
 
+const I18N = {
+  locale: "en",
+  fallbackLocale: "en",
+  messages: {
+    en: {
+      buttonText: {
+        automation: "Add...",
+      },
+    },
+  },
+};
+
 export default function OSCConfiguration(config = {}) {
   const preview = new URL(import.meta.url).href.replace(
     "/osc-config.mjs",
@@ -176,6 +188,7 @@ export default function OSCConfiguration(config = {}) {
     defaultSchemaDetails: defaultSchemaDetails,
     editors: EDITOR_CONFIG,
     editorOperationOn: EDITOR_OPERATION_ON,
+    i18n: I18N,
     ...config,
   });
 }
