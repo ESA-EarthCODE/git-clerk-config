@@ -1,4 +1,9 @@
 import GitClerkConfiguration from "./git-clerk-config.mjs";
+import { slugify } from "./src/helpers.js";
+import addFileAutomation from "./src/automation/add-file.js";
+import addExperimentAutomation from "./src/automation/add-experiment.js";
+import addVarProjProdBundleAutomation from "./src/automation/add-var-proj-prod-bundle.js";
+import editFileAutomationAutomation from "./src/automation/edit-file.js";
 
 const EDITOR_CONFIG = {
   "osc:project": {
@@ -68,11 +73,6 @@ const EDITOR_CONFIG = {
     type: "array",
     format: "temporal-interval",
     func: "TemporalIntervalEditor",
-  },
-  updated: {
-    type: "string",
-    format: "date-time",
-    func: "UpdateStringEditor",
   },
 };
 
@@ -166,7 +166,37 @@ const I18N = {
   },
 };
 
-export default function OSCConfiguration(config = {}) {
+const AUTOMATION_ENTITIES = [
+  {
+    title: "Product",
+    path: "products",
+    fileName: "collection.json",
+    relType: "child",
+    initValue: (input) => ({
+      id: slugify(input.title),
+      title: input.title,
+      created: new Date().toISOString().replace(/\.[0-9]{3}/, ""),
+      "osc:status": "completed",
+      type: "Collection",
+      "osc:type": "product",
+    }),
+  },
+  {
+    title: "Project",
+    path: "projects",
+    fileName: "collection.json",
+    relType: "child",
+    initValue: (input) => ({
+      id: slugify(input.title),
+      title: input.title,
+      "osc:status": "completed",
+      type: "Collection",
+      "osc:type": "project",
+    }),
+  },
+];
+
+export default function OSCConfiguration() {
   const preview = new URL(import.meta.url).href.replace(
     "/osc-config.mjs",
     "/osc.html",
@@ -183,13 +213,26 @@ export default function OSCConfiguration(config = {}) {
     },
   };
 
+  const fileAutomation = addFileAutomation();
+  const experimentAutomation = addExperimentAutomation();
+  const varProjProdBundleAutomation = addVarProjProdBundleAutomation();
+  const editFileAutomation = editFileAutomationAutomation();
+
   GitClerkConfiguration({
     schema: SCHEMA,
     defaultSchemaDetails: defaultSchemaDetails,
     editors: EDITOR_CONFIG,
     editorOperationOn: EDITOR_OPERATION_ON,
     i18n: I18N,
-    ...config,
+    automationEntities: AUTOMATION_ENTITIES,
+    customAutomation: [
+      varProjProdBundleAutomation,
+      editFileAutomation,
+      fileAutomation,
+      experimentAutomation,
+    ],
+    slugify: slugify,
+    generateEnums: true,
   });
 }
 

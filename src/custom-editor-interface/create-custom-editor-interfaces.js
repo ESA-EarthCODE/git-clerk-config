@@ -10,13 +10,9 @@ const EDITORS = {
 };
 
 export default function createCustomEditorInterfaces(config) {
-  const editors = config.editors;
-  const editorOperationOn = config.editorOperationOn;
+  const editors = config.editors || {};
+  const editorOperationOn = config.editorOperationOn || {};
   let customEditorInterfaces = {};
-
-  if (!editors) {
-    throw new Error("Editor is required");
-  }
 
   Object.keys(editors).forEach((id) => {
     let editor = editors[id];
@@ -29,7 +25,7 @@ export default function createCustomEditorInterfaces(config) {
     if (editor.operation === true) {
       editor.operation = {
         ...Operation,
-        on: editorOperationOn || {},
+        on: editorOperationOn,
       };
     }
 

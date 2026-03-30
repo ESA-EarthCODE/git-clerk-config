@@ -1,3 +1,4 @@
+import "https://cdn.jsdelivr.net/npm/@json-editor/json-editor@latest/dist/jsoneditor.js";
 import { decoderBase64ToUtf8 } from "../helpers.js";
 
 export default async function createGenerateEnums(
@@ -11,6 +12,7 @@ export default async function createGenerateEnums(
       const hidden = document.createElement("div");
       const jsoneditor = new JSONEditor(hidden, {
         schema: schemaMetaDetails.schema,
+        ajax: true,
       });
       schemaMetaDetails.schema = {
         ...schemaMetaDetails.schema,

@@ -1,4 +1,6 @@
-class TemporalIntervalEditor extends JSONEditor.AbstractEditor {
+import { AbstractEditor } from "https://cdn.jsdelivr.net/npm/@json-editor/json-editor@latest/src/editor.js/+esm";
+
+class TemporalIntervalEditor extends AbstractEditor {
   register() {
     super.register();
   }

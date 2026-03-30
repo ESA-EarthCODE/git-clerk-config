@@ -1,9 +1,10 @@
+import { AbstractEditor } from "https://cdn.jsdelivr.net/npm/@json-editor/json-editor@latest/src/editor.js/+esm";
 import handleFileContentUpdate from "./handle-file-content-update.js";
 import { handleLoaderPostMessage } from "../helpers.js";
 
 // Example of how to build a custom editor can be found here:
 // https://github.com/json-editor/json-editor/blob/master/docs/custom-editor.html
-class SelectEditor extends JSONEditor.AbstractEditor {
+class SelectEditor extends AbstractEditor {
   register() {
     super.register();
   }
