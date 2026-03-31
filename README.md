@@ -4,38 +4,7 @@ Configuration service for [git-clerk](https://github.com/EOX-A/git-clerk) — th
 
 ## How It Works
 
-Rather than bundling configuration into the git-clerk editor itself, this project serves configuration as **live ES modules over HTTP**. The git-clerk front-end dynamically imports these modules at runtime, allowing independent deployment and updates without redeploying the editor.
-
-## Project Structure
-
-```
-git-clerk-config/
-├── osc-config.mjs              # Main OSC configuration module (browser entry point)
-├── osc.html                    # STAC Browser preview iframe page to preview
-├── osc/                        # Modular configuration modules
-│   ├── helpers.js              # Shared utilities (slugify, base64, URL validation)
-│   ├── schema-map/
-│   │   └── create-schema-map.js          # STAC entity-to-schema path mappings
-│   ├── automation/
-│   │   ├── create-automation.js          # Aggregates all automation definitions
-│   │   ├── add-entities.js               # "Add Product" / "Add Project" workflows
-│   │   ├── add-file.js                   # "Add external OSC file" workflow
-│   │   ├── add-experiment.js             # "Add OSC experiment" bundle workflow
-│   │   ├── add-var-proj-prod-bundle.js   # "Add Variable, Project & Product" bundle
-│   │   └── edit-file.js                  # "Open external file" workflow
-│   ├── custom-editor-interface/
-│   │   ├── create-custom-editor-interfaces.js  # Aggregates all custom editors
-│   │   ├── osc-editor.js                # Select-based editor for OSC entity fields
-│   │   ├── temporal-interval-editor.js   # Date-range picker editor
-│   │   ├── string-editor.js             # Auto-timestamp "updated" field editor
-│   │   ├── operation.js                 # Bidirectional link select/unselect/save
-│   │   └── handle-file-content-update.js # Fetches file content from GitHub on selection
-│   └── generate-enums/
-│       └── create-generate-enums.js      # Dynamic enum population from catalog data
-│   └── i18n/
-│       └── create-i18n.js              # Add 18n config related to OSC
-└── package.json
-```
+Rather than bundling configuration into the git-clerk editor itself, this project serves configuration as **live ES modules over HTTP**. The git-clerk front-end dynamically imports these modules at runtime, allowing independent deployment and updates without redeploying the editor and by using [EOEPCA/manager-ui-configuration](https://github.com/EOEPCA/manager-ui-configuration) which allow to generate config for `git-clerk`.
 
 ## Configuration Modules
 

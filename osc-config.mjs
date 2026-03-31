@@ -1,4 +1,4 @@
-import GitClerkConfiguration from "http://localhost:8080/git-clerk-config.mjs";
+import GitClerkConfiguration from "https://eoepca.github.io/manager-ui-configuration/git-clerk-config.mjs";
 import { slugify } from "./src/helpers.js";
 import addFileAutomation from "./src/automation/add-file.js";
 import addExperimentAutomation from "./src/automation/add-experiment.js";
