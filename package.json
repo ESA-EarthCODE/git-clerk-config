@@ -4,11 +4,13 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "dev": "live-server --port=8080 --cors",
     "format": "prettier --write ."
   },
   "author": "EOX",
   "license": "MIT",
   "devDependencies": {
-    "@eox/eslint-config": "^2.0.0"
+    "@eox/eslint-config": "^2.0.0",
+    "live-server": "^1.2.2"
   }
 }

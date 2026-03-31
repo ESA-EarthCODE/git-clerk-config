@@ -42,12 +42,3 @@ export function capitalizeFirstLetter(val) {
 export function decoderBase64ToUtf8(str) {
   return decodeURIComponent(escape(atob(str)));
 }
-
-export function handleLoaderPostMessage(enable = true) {
-  window.parent.postMessage(
-    {
-      type: enable ? "ENABLE_LOADER_POSTMESSAGE" : "DISABLE_LOADER_POSTMESSAGE",
-    },
-    "*",
-  );
-}
